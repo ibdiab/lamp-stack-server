@@ -6,7 +6,7 @@ This project demonstrates the setup and deployment of a LAMP stack (Linux, Apach
 
 # Step 1: Use a Static IP on Your Ubuntu System
 
-Edit `/etc/netplan/99_config.yaml` using your preferred text editor. Your network interface might be different depending on your system. To identify your interface and default gateway:
+Edit `/etc/netplan/99_config.yaml` using your preferred text editor. The reason behind a static IP is to ensure stability. When we have one consistent IP, the server knows to use that singular IP. However, if we use DHCP, that IP could change randomly. This results in several things breaking, like: firewall rules, hostnames, configs, etc. Your network interface might be different depending on your system. To identify your interface and default gateway:
 
 ```bash
 ip a          # Find your interface name
@@ -40,7 +40,7 @@ sudo netplan apply
 
 # Step 2: (Optional but highly recommended) Setup Local Hostname Resolution
 
-This step makes WordPress configuration easier. Edit `/etc/hosts`:
+This step makes WordPress configuration easier, since you won't need to type the full IP address in order to access WordPress once configuration is done. Edit `/etc/hosts`:
 
 ```bash
 sudo nano /etc/hosts
@@ -176,7 +176,7 @@ Create the Apache virtual host file:
 sudo nano /etc/apache2/sites-available/wordpress.conf
 ```
 
-Paste the following:
+The following code will relate our blog to the directory `/usr/share/wordpress` and grants access to WordPress content. Paste the following:
 
 ```apache
 Alias /blog /usr/share/wordpress
@@ -205,7 +205,7 @@ Create the WordPress config file:
 sudo nano /etc/wordpress/config-username.php  // Replace 'username' with your actual computer's username
 ```
 
-Replace with your values:
+The PHP file allows WordPress to connect to the MariaDB database and find important files like plugins. Without this, we can't run the installer, our blog won't load, and WordPress won't be able to connect to the MariaDB database. Replace with your values:
 
 ```php
 <?php
@@ -239,10 +239,10 @@ sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 sudo iptables-save
 ```
 
-✅ This allows HTTP, SSH, DNS, and apt functionality — while dropping everything else.
+✅ This allows HTTP, SSH, DNS, and apt functionality — while dropping everything else. This ensures the best functionality while retaining security. Confirm your rules with `sudo iptables -L -n -v`
 
 ---
 
 # Step 9: Making Your First Blog Post
 
-Now that WordPress is installed and secured, log in and create your first blog. You can use the built-in editor to write about your project, your learning experience, or anything else. You can check the attached screenshot for a sample entry I made xplaining what a LAMP stack is along with some issues I encountered and how I fixed them.
+Now that WordPress is installed and secured, log in and create your first blog. You can use the built-in editor to write about your project, your learning experience, or anything else. You can check the attached screenshot for a sample entry I made explaining what a LAMP stack is along with some issues I encountered and how I fixed them.
