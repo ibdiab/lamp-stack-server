@@ -122,7 +122,7 @@ Enable it on boot if needed:
 sudo systemctl enable mariadb
 ```
 
-Secure the installation:
+Run the secure installation script:
 
 ```bash
 sudo mysql_secure_installation
