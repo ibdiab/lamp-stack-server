@@ -49,7 +49,7 @@ sudo nano /etc/hosts
 Add the following line (adjust your username accordingly):
 
 ```
-192.168.245.5    username
+192.168.245.5 username
 ```
 
 Test your internet and internal hostname resolution:
