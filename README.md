@@ -249,4 +249,5 @@ Now that WordPress is installed and secured, log in and create your first websit
 - Share what you've learned
 - Share tips or make tutorials
 - Test some plugins and themes
-Here's a sample entry I made explaining what a LAMP stack is along with some issues I encountered and how I fixed them: ![sample blog](https://github.com/user-attachments/assets/d4ff7477-157e-4f4f-b2ca-9e6969b99a40)
+
+Here's a sample blog post I made explaining what a LAMP stack is along with some issues I encountered and how I fixed them: ![sample blog](https://github.com/user-attachments/assets/d4ff7477-157e-4f4f-b2ca-9e6969b99a40)
