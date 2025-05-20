@@ -77,7 +77,7 @@ sudo apt install apache2 php php-mysql mariadb-server wordpress nftables
 
 Descriptions:
 - `apache2`: Web server
-- `php`: Server-side scripting
+- `php`: Server software used with apache to render more complex websites
 - `php-mysql`: PHP extension for MySQL/MariaDB
 - `mariadb-server`: Database engine
 - `wordpress`: Website/blog CMS
