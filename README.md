@@ -1,6 +1,7 @@
 # lamp-stack-server
 
-This project demonstrates the setup and deployment of a LAMP stack (Linux, Apache, MariaDB, PHP) on Ubuntu, along with installing and configuring WordPress. This also includes server hardening and firewall configuration to protect your web server from hackers. **Note: This works with other Debian-based distributions and not just Ubuntu.**
+This project demonstrates the setup and deployment of a LAMP stack (Linux, Apache, MariaDB, PHP) on Ubuntu, along with installing and configuring WordPress. This also includes server hardening and firewall configuration to protect your web server from hackers. **Note: This works with other Debian-based distributions and not just Ubuntu.** I eventually plan to add Fedora/Arch support but there are differences between them regarding package/service names, config paths, etc. that I have yet to test with this particular setup. 
+Feel free to test this and open a pull request with any results you find if you get there first.
 
 ---
 
