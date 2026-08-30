@@ -4,6 +4,7 @@ This project demonstrates the setup and deployment of a LAMP stack (Linux, Apach
 
 **Note: This works with every distribution based on Debian (ex. Ubuntu, Pop!_OS, Linux Mint, etc.)** I plan to add Fedora/Arch support but there are differences between them regarding package/service names, config paths, etc. that haven't been tested with this particular LAMP setup.
 Feel free to test this and open a pull request with any results you find if you get there first.
+For distributions outside of Fedora, Arch and Debian, please look into the packages your distro provides and take action accordingly. If your system doesn't use `systemctl` for service management, please look into the service management for your init system. I'm not familiar with distros outside of those 3, neither am I familiar with init systems outside of systemd. Feel free to open pull requests if you get this working on other distributions and init systems.
 
 ---
 
