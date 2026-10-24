@@ -1,6 +1,6 @@
 # lamp-stack-server
 
-**For security purposes, please read https://github.com/ibdiab/lamp-stack-server/issues/1 regarding 2 critical vulnerabilities for PHP, a key component of this LAMP stack setup.**
+**For security purposes, please read this issue https://github.com/ibdiab/lamp-stack-server/issues/1 regarding 2 critical vulnerabilities for PHP, a key component of this LAMP stack setup.**
 
 This project demonstrates the setup and deployment of a LAMP stack (Linux, Apache, MariaDB, PHP) on Ubuntu, along with installing and configuring WordPress. This also includes server hardening and firewall configuration to protect your web server from hackers. 
 
