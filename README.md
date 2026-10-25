@@ -37,7 +37,7 @@ network:
         addresses: [192.168.245.1]
 ```
 
-Apply permissions to the file such that only the owner can read and write it, no one else can modify it.
+Apply permissions to the file such that only the owner can read and write it, no one else can modify it:
 ```bash
 sudo chmod 600 /etc/netplan/99_config.yaml
 ```
