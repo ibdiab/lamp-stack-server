@@ -12,7 +12,8 @@ For distributions outside of Fedora, Arch and Debian, please look into the packa
 ---
 
 # Step 1: Use a Static IP on Your System
-
+**Note: This step uses netplan, which is the default tool on Ubuntu for setting up networking. Other Debian/Ubuntu based distributions might not use this. In that case, use your distros own networking tool, then continue from Step 2.
+**
 Edit `/etc/netplan/99_config.yaml` using your preferred text editor. The reason behind a static IP is to ensure stability. When we have one consistent IP, the server knows to use that singular IP. However, if we use DHCP, that IP could change randomly. This results in several things breaking, like: firewall rules, hostnames, configs, etc. Your network interface might be different depending on your system. To identify your interface and default gateway:
 
 ```bash
