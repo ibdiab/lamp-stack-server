@@ -20,7 +20,7 @@ ip a          # Find your interface name
 ip route      # Find your default gateway
 ```
 
-Replace `enp1s0` and `192.168.245.1` accordingly. Here’s a sample config:
+Replace `enp1s0` and `192.168.245.1` accordingly. `192.168.245.1` in this case is the first usable IP on your subnet, while `192.168.245` for example is your computers IP. Here’s a sample config:
 
 ```yaml
 network:
@@ -35,6 +35,11 @@ network:
           via: 192.168.245.1
       nameservers:
         addresses: [192.168.245.1]
+```
+
+Apply permissions to the file such that only the owner can read and write it, no one else can modify it.
+```bash
+sudo chmod 600 /etc/netplan/99_config.yaml
 ```
 
 Apply the configuration:
@@ -132,7 +137,7 @@ sudo systemctl enable mariadb
 Run the secure installation script:
 
 ```bash
-sudo mysql_secure_installation
+sudo mariadb-secure-installation
 ```
 
 Follow the prompts to:
@@ -230,23 +235,17 @@ Visit: `http://username/blog/wp-admin/install.php  // Replace 'username' with yo
 
 # Step 8: System Hardening for Increased Protection
 
-Use `nftables` to configure your firewall securely.
+Use `UFW (Uncomplicated Firewall)` to configure your firewall securely.
 
 ```bash
-sudo systemctl stop ufw
-sudo systemctl disable ufw
-sudo systemctl start nftables
-sudo systemctl enable nftables
-
-sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 53 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-
-sudo iptables-save
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw enable
 ```
 
-✅ This allows HTTP, SSH, DNS, and apt functionality — while dropping everything else. This ensures the best functionality while retaining security. Confirm your rules with `sudo iptables -L -n -v`
+✅ This allows HTTP, SSH, DNS, and apt functionality — while dropping everything else. This ensures the best functionality while retaining security. Confirm your rules with `sudo ufw status verbose`
 
 ---
 
