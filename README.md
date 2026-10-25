@@ -11,6 +11,13 @@ For distributions outside of Fedora, Arch and Debian, please look into the packa
 
 ---
 
+**Architecture Diagram**
+
+This diagram provides a visual look into how network traffic reaches the server. Any client on the internet and your personal computer (used to connect to the server) go through the firewall. Only SSH (22), HTTP (80), and optionally HTTPS (443), are allowed in, and all other ports are blocked: <img width="1920" height="1200" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/180fe0be-610a-4134-a18f-66d95606f10c" />
+
+
+---
+
 # Step 1: Use a Static IP on Your System
 **Note:** This step uses netplan, which is the default tool on Ubuntu for setting up networking. Other Debian/Ubuntu based distributions might not use this. In that case, use your distros own networking tool, then continue from Step 2.
 
