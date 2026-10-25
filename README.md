@@ -254,7 +254,7 @@ sudo ufw allow 80/tcp
 sudo ufw enable
 ```
 
-✅ This allows HTTP, SSH, DNS, and apt functionality — while dropping everything else. This ensures the best functionality while retaining security. Confirm your rules with `sudo ufw status verbose`
+✅ This allows HTTP, SSH, HTTPS (optionally) while dropping everything else. This ensures the best functionality while retaining security. Outgoing traffic is allowed, so the server can still use apt and DNS. Confirm your rules with `sudo ufw status verbose`
 
 ---
 
