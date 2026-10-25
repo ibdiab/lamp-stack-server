@@ -11,7 +11,7 @@ For distributions outside of Fedora, Arch and Debian, please look into the packa
 
 ---
 
-# Step 1: Use a Static IP on Your Ubuntu System
+# Step 1: Use a Static IP on Your System
 
 Edit `/etc/netplan/99_config.yaml` using your preferred text editor. The reason behind a static IP is to ensure stability. When we have one consistent IP, the server knows to use that singular IP. However, if we use DHCP, that IP could change randomly. This results in several things breaking, like: firewall rules, hostnames, configs, etc. Your network interface might be different depending on your system. To identify your interface and default gateway:
 
