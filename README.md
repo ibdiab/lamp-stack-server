@@ -307,3 +307,4 @@ ssh your-linux-username@wpserver
 ```
 
 Replace `your-linux-username` with the account you log into the server with, and `wpserver` with the hostname from your `/etc/hosts` file (or use the server's IP address). This is where your Linux username matters, unlike the hostname and database names.
+For Windows/Mac users, you can add the hosts entry manually or connect with the server's IP.
