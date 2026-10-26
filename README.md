@@ -2,23 +2,25 @@
 
 **For security purposes, please read this issue https://github.com/ibdiab/lamp-stack-server/issues/1 regarding 2 critical vulnerabilities for PHP, a key component of this LAMP stack setup.**
 
-This project demonstrates the setup and deployment of a LAMP stack (Linux, Apache, MariaDB, PHP) on Ubuntu, along with installing and configuring WordPress. This also includes server hardening and firewall configuration to protect your web server from hackers. 
+This project demonstrates the setup and deployment of a LAMP stack (Linux, Apache, MariaDB, PHP) on Ubuntu, along with installing and configuring WordPress. This also includes server hardening and firewall configuration to protect your web server from hackers.
 
-**Note: This works with every distribution based on Debian (ex. Ubuntu, Pop!_OS, Linux Mint, etc.)** I plan to add Fedora/Arch support but there are differences between them regarding package/service names, config paths, etc. that haven't been tested with this particular LAMP setup.
+**Note: This should work with most distributions based on Debian (ex. Ubuntu, Pop!_OS, Linux Mint, etc.)**
+There are a few steps that are Ubuntu specific (ex. netplan). I ran this LAMP stack on Ubuntu 26.04 LTS. Other Debian/Ubuntu based Linux flavors might not use this. In that case, follow your distributions guide to set a static IP on your server and continue from step 2.
+
 Feel free to test this and open a pull request with any results you find if you get there first.
-
-For distributions outside of Fedora, Arch and Debian, please look into the packages your distro provides and take action accordingly. If your system doesn't use `systemctl` for service management, please look into the service management for your init system. I'm not familiar with distros outside of those 3, neither am I familiar with init systems outside of systemd. Feel free to open pull requests if you get this working on other distributions and init systems.
 
 ---
 
 # **Architecture Diagram**
 
-This diagram provides a visual look into how network traffic reaches the server. Any client on the internet and your personal computer (used to connect to the server) go through the firewall. Only SSH (22), HTTP (80), and optionally HTTPS (443), are allowed in, and all other ports are blocked: <img width="1920" height="1200" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/180fe0be-610a-4134-a18f-66d95606f10c" />
+This diagram provides a visual look into how network traffic reaches the server. Any client on the internet and your personal computer (used to connect to the server) go through the firewall. Only HTTP (80) is allowed in, and all other ports are blocked. Optionally, HTTPS (443) and SSH (22) can be allowed if needed: 
+<img width="1920" height="1200" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/af263af4-f32b-444d-bf46-b49bf4190dae" />
+
 
 
 ---
 
-# Step 1: Use a Static IP on Your System
+# Step 1: Use a Static IP on Your Server
 **Note:** This step uses netplan, which is the default tool on Ubuntu for setting up networking. Other Debian/Ubuntu based distributions might not use this. In that case, use your distros own networking tool, then continue from Step 2.
 
 
@@ -29,7 +31,7 @@ ip a          # Find your interface name
 ip route      # Find your default gateway
 ```
 
-Replace `enp1s0` and `192.168.245.1` accordingly. `192.168.245.1` in this case is the first usable IP on your subnet, while `192.168.245` for example is your computers IP. Here’s a sample config:
+Replace `enp1s0` and `192.168.245.1` accordingly. `192.168.245.1` in this case is the first usable IP on your subnet, while `192.168.245.5` for example is your server's IP. Here’s a sample config:
 
 ```yaml
 network:
@@ -67,16 +69,16 @@ This step makes WordPress configuration easier, since you won't need to type the
 sudo nano /etc/hosts
 ```
 
-Add the following line (adjust your username accordingly):
+Add the following line (adjust your IP and hostname accordingly):
 
 ```
-192.168.245.5 username
+192.168.245.5 wpserver
 ```
 
 Test your internet and internal hostname resolution:
 
 ```bash
-ping username
+ping wpserver
 ping www.debian.org
 ```
 
@@ -93,7 +95,7 @@ sudo apt update && sudo apt upgrade
 Install the required packages:
 
 ```bash
-sudo apt install apache2 php php-mysql mariadb-server wordpress nftables
+sudo apt install apache2 php php-mysql mariadb-server wordpress
 ```
 
 Descriptions:
@@ -102,7 +104,6 @@ Descriptions:
 - `php-mysql`: PHP extension for MySQL/MariaDB
 - `mariadb-server`: Database engine
 - `wordpress`: Website/blog CMS
-- `nftables`: Modern firewall utility
 
 ---
 
@@ -156,27 +157,27 @@ Follow the prompts to:
 - Remove the test database
 - Reload the privilege tables
 
-✏️ **Write your root password down somewhere safe.**
+✏️ **Write your root password down somewhere safe, and ensure it is a secure password.**
 
 ---
 
 # Step 6: Setup MariaDB for WordPress
 
-Connect to MySQL:
+Connect to MariaDB:
 
 ```bash
-mysql -h localhost -u root -p  // Replace 'root' with your chosen admin username if different
+mysql -h localhost -u root -p  # Replace 'root' with your chosen admin username if different
 ```
 
 SQL commands to configure your database and user:
 
 ```sql
 
-CREATE DATABASE myblog;  // Replace 'myblog' with your blog database name
+CREATE DATABASE wordpressDB;  # Replace 'wordpressDB' with your database's name
 
-CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';  // Replace 'username' and 'password' to match your setup
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';  # Replace 'username' and 'password' to match your setup
 
-GRANT ALL PRIVILEGES ON myblog.* TO username@localhost IDENTIFIED BY 'password';  // Replace 'myblog', 'username', and 'password' to match your setup
+GRANT ALL PRIVILEGES ON wordpressDB.* TO username@localhost IDENTIFIED BY 'password';  # Replace 'wordpressDB', 'username', and 'password' to match your setup
 
 FLUSH PRIVILEGES;
 ```
@@ -223,22 +224,22 @@ sudo systemctl restart apache2
 Create the WordPress config file:
 
 ```bash
-sudo nano /etc/wordpress/config-username.php  // Replace 'username' with your actual computer's username
+sudo nano /etc/wordpress/config-wpserver.php  # Replace 'wpserver' with the hostname from your /etc/hosts file
 ```
 
 The PHP file allows WordPress to connect to the MariaDB database and find important files like plugins. Without this, we can't run the installer, our blog won't load, and WordPress won't be able to connect to the MariaDB database. Replace with your values:
 
 ```php
 <?php
-define('DB_NAME', 'myblog');  // Replace 'myblog' with your actual database name
-define('DB_USER', 'username');  // Replace 'username' with your DB username
-define('DB_PASSWORD', 'password');  // Replace 'password' with your DB password
+define('DB_NAME', 'wordpressDB');  # Replace 'wordpressDB' with your database's name
+define('DB_USER', 'username');  # Replace 'username' with your DB username
+define('DB_PASSWORD', 'password');  # Replace 'password' with your DB password and make sure it is a secure password
 define('DB_HOST', 'localhost');
 define('WP_CONTENT_DIR', '/usr/share/wordpress/wp-content');
 ?>
 ```
 
-Visit: `http://username/blog/wp-admin/install.php  // Replace 'username' with your system hostname` and follow the setup wizard.
+Visit `http://wpserver/blog/wp-admin/install.php` (replace `wpserver` with the hostname from your `/etc/hosts` file) and follow the setup wizard.
 
 ---
 
@@ -249,12 +250,11 @@ Use `UFW (Uncomplicated Firewall)` to configure your firewall securely.
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp
 sudo ufw enable
 ```
 
-✅ This allows HTTP and SSH - while dropping everything else. This ensures the best functionality while retaining security. Outgoing traffic is allowed, so the server can still use apt and DNS. Confirm your rules with `sudo ufw status verbose`
+✅ This allows HTTP - while dropping all other incoming traffic. This ensures the best functionality while retaining security. Outgoing traffic is allowed, so the server can still use apt and DNS. Confirm your rules with `sudo ufw status verbose`
 
 ---
 
@@ -266,3 +266,44 @@ Now that WordPress is installed and secured, log in and create your first websit
 - Test some plugins and themes
 
 Here's a sample blog post I made explaining what a LAMP stack is along with some issues I encountered and how I fixed them: ![sample blog](https://github.com/user-attachments/assets/d4ff7477-157e-4f4f-b2ca-9e6969b99a40)
+
+# *Optional* Step 10: Enabling HTTPS for better security and SSH for remote connections to the server
+
+## HTTPS 
+This uses Apache's built-in self-signed certificate, which I tested on Ubuntu 26.04 LTS. It encrypts traffic, but browsers can't verify who issued the certificate. A browser-trusted certificate (Let's Encrypt) requires a domain you own, which I haven't tested.
+
+Run the below commands to set up HTTPS for your server:
+
+```bash
+sudo a2enmod ssl
+sudo a2ensite default-ssl
+sudo ufw allow 443/tcp
+sudo systemctl restart apache2
+```
+
+Then go to `https://wpserver/blog/wp-login.php` (use the name from your `/etc/hosts` file). Your browser will warn that the certificate is self-signed. That's expected, since no trusted authority issued it. Only continue on your own network, and not if you see this warning on a server you didn't set up yourself.
+
+## SSH
+This is best used when you need to remotely connect to your server to make configuration changes. The commands below allow SSH from your LAN only, so it isn't exposed to the internet.
+
+Install the SSH server if not already installed:
+
+```bash
+sudo apt install openssh-server
+```
+
+Find your LAN's subnet with `ip route` (the line like `192.168.245.0/24`), then allow SSH from it only. Replace the subnet with yours:
+
+```bash
+sudo ufw allow from 192.168.245.0/24 to any port 22 proto tcp
+```
+
+Ensure your client computer (the system you will use to remotely connect to the server), has the same `/etc/hosts` entry.
+
+Confirm the rule with `sudo ufw status verbose`. Then, from another computer on your network, connect with:
+
+```bash
+ssh your-linux-username@wpserver
+```
+
+Replace `your-linux-username` with the account you log into the server with, and `wpserver` with the hostname from your `/etc/hosts` file (or use the server's IP address). This is where your Linux username matters, unlike the hostname and database names.
