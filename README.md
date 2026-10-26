@@ -233,7 +233,7 @@ The PHP file allows WordPress to connect to the MariaDB database and find import
 <?php
 define('DB_NAME', 'wordpressDB');  # Replace 'wordpressDB' with your database's name
 define('DB_USER', 'username');  # Replace 'username' with your DB username
-define('DB_PASSWORD', 'password');  # Replace 'password' with your DB password and make sure it is a secure password
+define('DB_PASSWORD', 'password');  # Replace 'password' with the DB password you set in Step 6
 define('DB_HOST', 'localhost');
 define('WP_CONTENT_DIR', '/usr/share/wordpress/wp-content');
 ?>
